@@ -57,23 +57,28 @@ public class ExcelUtil {
 		return bool;
 	}
 	
-	public static boolean replaceModel2007(List<ExcelReplaceDataVO> datas,
+	public static boolean replaceModel2007(List<List<ExcelReplaceDataVO>> allDatas,
 			String sourceFilePath, String targetFilePath) {
 		boolean bool = true;
 		try {
 			InputStream inp = new FileInputStream(sourceFilePath);
 			XSSFWorkbook wb = new XSSFWorkbook(inp);
-			// 读取第一章表格内容
-			XSSFSheet sheet = wb.getSheetAt(0);
-			for (ExcelReplaceDataVO data : datas) {
-				// 获取单元格内容
-				XSSFRow row = sheet.getRow(data.getRow());
-				XSSFCell cell = row.getCell((short) data.getColumn());
-				// 写入单元格内容
-				cell.setCellType(HSSFCell.CELL_TYPE_STRING);
-				// cell.setEncoding(HSSFCell.ENCODING_UTF_16);
-				cell.setCellValue(data.getValue());
-			}
+
+			for (int i = 0; i < allDatas.size(); i ++) {
+                // 读取第一章表格内容
+                List<ExcelReplaceDataVO> sdata = allDatas.get(i);
+                XSSFSheet sheet = wb.getSheetAt(i);
+                for (ExcelReplaceDataVO data : sdata) {
+                    // 获取单元格内容
+                    XSSFRow row = sheet.getRow(data.getRow());
+                    XSSFCell cell = row.getCell((short) data.getColumn());
+                    // 写入单元格内容
+                    cell.setCellType(HSSFCell.CELL_TYPE_STRING);
+                    // cell.setEncoding(HSSFCell.ENCODING_UTF_16);
+                    cell.setCellValue(data.getValue());
+                }
+            }
+
 			// 输出文件
 			FileOutputStream fileOut = new FileOutputStream(targetFilePath);
 			wb.write(fileOut);
