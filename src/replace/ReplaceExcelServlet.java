@@ -23,11 +23,20 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.tomcat.util.http.fileupload.FileItem;
+import org.apache.tomcat.util.http.fileupload.disk.DiskFileItemFactory;
+import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
 
 import util.EPlatform;
 import util.OSinfo;
@@ -37,14 +46,17 @@ public class ReplaceExcelServlet extends HttpServlet {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
-
-	public static final String fileName = "大兴终端监控情况数据分析-12.5.xlsx";
-	public static final String queryDate = "20171205";
+	
 
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		System.out.println("查询日期：" + request.getParameter("queryDate"));
+		System.out.println("文件名称：" + request.getParameter("fileName"));
+		
+		String fileName = request.getParameter("fileName");
+		String queryDate = request.getParameter("queryDate");
 
 		System.out.println("开始时间>>>>>" + new Date().toLocaleString());
 		String docsPath = request.getSession().getServletContext()
@@ -79,7 +91,7 @@ public class ReplaceExcelServlet extends HttpServlet {
             List<List<ExcelReplaceDataVO>> allDatas = new ArrayList<List<ExcelReplaceDataVO>>();
 
 			// 读取第一章表格内容
-			for (int m = 0; m <= 1; m ++) {
+			for (int m = 0; m < xwb.getNumberOfSheets(); m ++) {
                 List<ExcelReplaceDataVO> datas = new ArrayList<ExcelReplaceDataVO>();
                 XSSFSheet sheet = xwb.getSheetAt(m);
                 Object value = null;
@@ -234,7 +246,7 @@ public class ReplaceExcelServlet extends HttpServlet {
 		}
 
 	}
-
+	
 	private void download(String path, HttpServletResponse response) {
 		try {
 			// path是指欲下载的文件的路径。

@@ -25,13 +25,20 @@ function formSubmit(mapping){
 </script>
   </head>
   <body>
-  	<h2>POI</h2><hr><br>
+  	<h2>文件导出</h2><hr><br>
   	<form id="excelForm" method="post">
-	    <a href="javascript:void(0)" onclick="formSubmit('read')">Read excel 2003 or 2007</a><br><br>
-	    <a href="javascript:void(0)" onclick="formSubmit('export')">Export excel 2003</a><br><br>
-	    <a href="javascript:void(0)" onclick="formSubmit('export2007')">Export excel 2007</a><br><br>
-	    <a href="javascript:void(0)" onclick="formSubmit('replace')">Export excel by templates,replace a cell</a><br><br>
-	    <a href="javascript:void(0)" onclick="formSubmit('template')">Export excel by templates,insert a table</a><br><br>
+  		日&nbsp;&nbsp;&nbsp;&nbsp;期&nbsp;&nbsp;&nbsp;: <input name="queryDate" value = ""/><br>
+  		文件名称: <input name="fileName" value = ""/><br>
+	    <a href="javascript:void(0)" onclick="formSubmit('replace')">导出数据</a><br><br>
     </form>
+    
+    
+  	<h2>文件上传</h2><hr><br>
+    <form method="post" action="/poi/uploadServlet" enctype="multipart/form-data">
+	    选择一个文件:
+	    <input type="file" name="uploadFile" />
+	    <br/><br/>
+	    <input type="submit" value="上传" />
+	</form>
   </body>
 </html>
